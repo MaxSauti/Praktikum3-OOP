@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 /**
@@ -75,11 +76,12 @@ class Spiel
     {
         Raum draussen, hoersaal, cafeteria, labor, buero;
         Hilfsmittel s1 = new Spickzettel("Spickzettel");
+        Hilfsmittel s2 = new Spickzettel("Spickzettel");
         // die R�ume erzeugen
         draussen = new Raum("vor dem Haupteingang der Universit�t");
         hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
         cafeteria = new Raum("in der Cafeteria der Uni", s1);
-        labor = new Raum("in einem Rechnerraum");
+        labor = new Raum("in einem Rechnerraum", s2);
         buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
         
         // die Ausg�nge initialisieren
@@ -154,7 +156,13 @@ class Spiel
             beantworteFrage(befehl);
         } else if (befehlswort.equals("collect")) {
             sammleHilfsmittel(befehl);
-        } else if (befehlswort.equals("quit")) {
+        } else if (befehlswort.equals("inv")) {
+            zeigeInventar();
+        }
+        else if (befehlswort.equals("use")) {
+            nutzeHilfsmittel(befehl);
+        }
+        else if (befehlswort.equals("quit")) {
             moechteBeenden = beenden(befehl);
         }
         return moechteBeenden;
@@ -220,16 +228,16 @@ class Spiel
 
         Frage frage = aktuellerRaum.getGegner().getFrage();
         int richtigIDX = frage.getRichtigeAntwort();
-        boolean valide = false;
-        int antwort = 0;
-        while (!valide) {
-            try {
-                valide = true;
-                antwort = Integer.parseInt(befehl.gibZweitesWort());
-            } catch (NumberFormatException ignored) {
-                System.out.println("Gib bitte eine verfügbare Zahl an");
-            }
+
+        int antwort;
+
+        try {
+            antwort = Integer.parseInt(befehl.gibZweitesWort());
+        } catch (NumberFormatException ignored) {
+            System.out.println("Gib bitte eine verfügbare Zahl an");
+            return;
         }
+
 
         if (antwort - 1 == richtigIDX) {
             System.out.println("Richtige Antwort, der Gegner ist besiegt");
@@ -252,6 +260,47 @@ class Spiel
         System.out.println(aktuellerRaum.getHilfsmittel().getBeschreibung() + " eingesammelt");
         aktuellerRaum.sammleHilfsmittel();
         System.out.println(aktuellerRaum.gibLangeBeschreibung());
+    }
+
+    public void zeigeInventar(){
+        int i = 1;
+        for (Hilfsmittel item : inventar) {
+            System.out.println(i + ". " + item.getBeschreibung());
+            i++;
+        }
+    }
+
+    public void nutzeHilfsmittel(Befehl befehl){
+        if (!befehl.hatZweitesWort()) {
+            zeigeInventar();
+            System.out.println("Welches Item willst du nutzen?");
+            return;
+        }
+
+        Hilfsmittel help;
+        int index;
+
+        try {
+            index = Integer.parseInt(befehl.gibZweitesWort()) - 1;
+            help = inventar.get(index);
+        } catch (Exception ignored) {
+            System.out.println("Gib einen passenden Index an");
+            return;
+        }
+
+
+        if (help.getBeschreibung().equals("Spickzettel")){
+            Spickzettel spicker = (Spickzettel) help;
+            if (aktuellerRaum.isBesiegt()){
+                System.out.println("In diesem Raum kannst du keinen Spickzettel verwenden");
+                return;
+            }
+            System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(aktuellerRaum.getGegner().getFrage()));
+            inventar.remove(index);
+        }
+
+
+
     }
 
     /**

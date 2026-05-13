@@ -78,7 +78,7 @@ class Raum
     public String gibLangeBeschreibung()
     {
         if (besiegt) {
-            return "Sie sind " + beschreibung + ".\n" + gibAusgaengeAlsString() + getHilfsmittelAlsString();
+            return "Sie sind " + beschreibung + ".\n" + getHilfsmittelAlsString() + gibAusgaengeAlsString();
         }
         else {
             return "Sie sind " + beschreibung +
@@ -125,9 +125,9 @@ class Raum
 
     public String getHilfsmittelAlsString() {
         if (hilfsmittel == null){
-            return "\nHilfsmittel in diesem Raum: keine";
+            return "Hilfsmittel in diesem Raum: keine\n";
         }
-        return "\nHilfsmittel in diesem Raum: " + hilfsmittel.getBeschreibung();
+        return "Hilfsmittel in diesem Raum: " + hilfsmittel.getBeschreibung() + "\n";
     }
 
     public Hilfsmittel getHilfsmittel() {
