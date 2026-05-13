@@ -30,7 +30,7 @@ public class Frage {
     public String getAntwortenString(){
         String formatiert = "";
         for (int i = 0; i < antworten.length; i++){
-            formatiert += i + 1 + ". " + antworten[i] + "\n";
+            formatiert += "\n" + (i + 1) + ". " + antworten[i];
         }
         return formatiert;
     }

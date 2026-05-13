@@ -20,6 +20,7 @@ class Raum
     private HashMap ausgaenge;        // die Ausg�nge dieses Raums
     private Gegner gegner;
     private boolean besiegt = true;
+    private Hilfsmittel hilfsmittel;
 
     /**
      * Erzeuge einen Raum mit einer Beschreibung. Ein Raum
@@ -37,6 +38,11 @@ class Raum
         this(beschreibung);
         setGegner(gegner);
         besiegt = false;
+    }
+
+    public Raum(String beschreibung, Hilfsmittel hilfsmittel) {
+        this(beschreibung);
+        this.hilfsmittel = hilfsmittel;
     }
 
     /**
@@ -72,14 +78,14 @@ class Raum
     public String gibLangeBeschreibung()
     {
         if (besiegt) {
-            return "Sie sind " + beschreibung + ".\n" + gibAusgaengeAlsString();
+            return "Sie sind " + beschreibung + ".\n" + gibAusgaengeAlsString() + getHilfsmittelAlsString();
         }
         else {
             return "Sie sind " + beschreibung +
                     ".\nDein Gegner in diesem Raum ist: " + gegner.getName() +
                     "\nUm ihn zu besiegen musst du seine Frage korrekt beantworten, sonst verlierst du ein Leben" +
                     "\nFrage: " + gegner.getFrage().getFrage() +
-                    "\n" + gegner.getFrage().getAntwortenString();
+                    gegner.getFrage().getAntwortenString();
 
         }
     }
@@ -111,6 +117,25 @@ class Raum
 
     public void setBesiegt(boolean besiegt){
         this.besiegt = besiegt;
+    }
+
+    public boolean isBesiegt() {
+        return besiegt;
+    }
+
+    public String getHilfsmittelAlsString() {
+        if (hilfsmittel == null){
+            return "\nHilfsmittel in diesem Raum: keine";
+        }
+        return "\nHilfsmittel in diesem Raum: " + hilfsmittel.getBeschreibung();
+    }
+
+    public Hilfsmittel getHilfsmittel() {
+        return hilfsmittel;
+    }
+
+    public void sammleHilfsmittel() {
+        hilfsmittel = null;
     }
 }
 

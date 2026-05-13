@@ -14,4 +14,6 @@ public class Gegner {
     public Frage getFrage() {
         return frage;
     }
+
+
 }

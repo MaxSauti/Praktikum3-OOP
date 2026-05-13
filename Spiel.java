@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  *  Dies ist die Hauptklasse der Anwendung "Die Welt von Zuul".
  *  "Die Welt von Zuul" ist ein sehr einfaches, textbasiertes
@@ -21,6 +23,9 @@ class Spiel
 {
     private Parser parser;
     private Raum aktuellerRaum;
+    private ArrayList<Gegner> gegnerListe = new ArrayList<>();
+    private ArrayList<Frage> fragenListe = new ArrayList<>();
+    private ArrayList<Hilfsmittel> inventar = new ArrayList<>();
         
     
     public static void main (String[] args)
@@ -34,25 +39,48 @@ class Spiel
      */
     public Spiel() 
     {
+        fragenAnlegen();
+        gegnerAnlegen();
         raeumeAnlegen();
         parser = new Parser();
     }
-    
+
+    private void fragenAnlegen() {
+        Frage frage1, frage2, frage3, frage4;
+        String[] antworten1, anworten2, antworten3, antworten4;
+
+        antworten1 = new String[]{"Wenn ihr Skalarprodukt 0 ist", "Wenn sie Vielfache voneinander sind", "Wenn ihr Skalarprodukt 1 ist", "Wenn sie orthogonal zueinander sind"};
+        frage1 = new Frage("Wann sind Vektoren parallel?", 1, antworten1);
+        fragenListe.add(frage1);
+
+        anworten2 = new String[]{"Vererbung", "Objektreferenzen", "Polymorphie", "Redundanz"};
+        frage2 = new Frage("Was beschreibt das Überladen von Methoden?", 2, anworten2);
+        fragenListe.add(frage2);
+    }
+
+    private void gegnerAnlegen(){
+        Gegner gegner1, gegner2, gegner3, gegner4;
+
+        gegner1 = new Gegner("Matheprofessor", fragenListe.get(0));
+        gegnerListe.add(gegner1);
+
+        gegner2 = new Gegner("Informatikprofessor", fragenListe.get(1));
+        gegnerListe.add(gegner2);
+    }
+
     /**
      * Erzeuge alle R�ume und verbinde ihre Ausg�nge miteinander.
      */
     private void raeumeAnlegen()
     {
         Raum draussen, hoersaal, cafeteria, labor, buero;
-        String[] antworten = {"3", "2", "1", "4"};
-        Frage f1 = new Frage("Was ist 1+1?", 1, antworten);
-      
+        Hilfsmittel s1 = new Spickzettel("Spickzettel");
         // die R�ume erzeugen
         draussen = new Raum("vor dem Haupteingang der Universit�t");
-        hoersaal = new Raum("in einem Vorlesungssaal", new Gegner("Matheprofessor", f1));
-        cafeteria = new Raum("in der Cafeteria der Uni");
+        hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
+        cafeteria = new Raum("in der Cafeteria der Uni", s1);
         labor = new Raum("in einem Rechnerraum");
-        buero = new Raum("im Verwaltungsb�ro der Informatik");
+        buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
         
         // die Ausg�nge initialisieren
         draussen.setzeAusgang("east", hoersaal);
@@ -124,6 +152,8 @@ class Spiel
             wechsleRaum(befehl);
         else if (befehlswort.equals("answer")) {
             beantworteFrage(befehl);
+        } else if (befehlswort.equals("collect")) {
+            sammleHilfsmittel(befehl);
         } else if (befehlswort.equals("quit")) {
             moechteBeenden = beenden(befehl);
         }
@@ -156,6 +186,11 @@ class Spiel
         if(!befehl.hatZweitesWort()) {
         	// Gibt es kein zweites Wort, wissen wir nicht, wohin...
             System.out.println("Wohin m�chten Sie gehen?");
+            return;
+        }
+
+        if (!aktuellerRaum.isBesiegt()) {
+            System.out.println("Du kannst den Raum erst verlassen wenn du den Gegner besiegt hast");
             return;
         }
 
@@ -199,7 +234,24 @@ class Spiel
         if (antwort - 1 == richtigIDX) {
             System.out.println("Richtige Antwort, der Gegner ist besiegt");
             aktuellerRaum.setBesiegt(true);
+            System.out.println(aktuellerRaum.gibLangeBeschreibung());
         }
+    }
+
+    public void sammleHilfsmittel(Befehl befehl){
+        if(befehl.hatZweitesWort()) {
+            System.out.println("Zum Einsammeln bitte nur \"collect\" eingeben");
+            return;
+        }
+        if (aktuellerRaum.getHilfsmittel() == null) {
+            System.out.println("Hier gibt es nichts einzusammeln");
+            return;
+        }
+
+        inventar.add(aktuellerRaum.getHilfsmittel());
+        System.out.println(aktuellerRaum.getHilfsmittel().getBeschreibung() + " eingesammelt");
+        aktuellerRaum.sammleHilfsmittel();
+        System.out.println(aktuellerRaum.gibLangeBeschreibung());
     }
 
     /**
