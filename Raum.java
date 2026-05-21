@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 class Raum 
 {
+    private boolean besucht = false;
     private String beschreibung;
     private HashMap ausgaenge;        // die Ausg�nge dieses Raums
     private Gegner gegner;
@@ -136,6 +137,18 @@ class Raum
 
     public void sammleHilfsmittel() {
         hilfsmittel = null;
+    }
+
+    public void setBesucht(boolean bes){
+        besucht = bes;
+    }
+
+    public boolean isBesucht() {
+        return besucht;
+    }
+
+    public HashMap getAusgaenge(){
+        return ausgaenge;
     }
 }
 

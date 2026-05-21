@@ -99,6 +99,9 @@ class Spiel
         buero.setzeAusgang("west", labor);
 
         aktuellerRaum = draussen;  // das Spiel startet draussen
+
+        Karte k1 = new Karte();
+        k1.sucheRaueme(aktuellerRaum);
     }
 
     /**
