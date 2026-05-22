@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 class Spiel 
 {
+    private int leben;
     private Parser parser;
     private Raum aktuellerRaum;
     private ArrayList<Gegner> gegnerListe = new ArrayList<>();
@@ -40,6 +41,7 @@ class Spiel
      */
     public Spiel() 
     {
+        leben = 5;
         fragenAnlegen();
         gegnerAnlegen();
         raeumeAnlegen();
@@ -62,11 +64,15 @@ class Spiel
     private void gegnerAnlegen(){
         Gegner gegner1, gegner2, gegner3, gegner4;
 
-        gegner1 = new Gegner("Matheprofessor", fragenListe.get(0));
+        gegner1 = new Professor("Matheprofessor", fragenListe.get(0));
         gegnerListe.add(gegner1);
 
-        gegner2 = new Gegner("Informatikprofessor", fragenListe.get(1));
+        gegner2 = new Professor("Informatikprofessor", fragenListe.get(1));
         gegnerListe.add(gegner2);
+
+        Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E");
+        gegner3 = new Praktikum("Theoretische Informatik", ti);
+        gegnerListe.add(gegner3);
     }
 
     /**
@@ -74,20 +80,23 @@ class Spiel
      */
     private void raeumeAnlegen()
     {
-        Raum draussen, hoersaal, cafeteria, labor, buero;
+        Raum draussen, hoersaal, cafeteria, labor, buero, flur;
         Hilfsmittel s1 = new Spickzettel("Spickzettel");
         Hilfsmittel s2 = new Spickzettel("Spickzettel");
+        Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
         // die R�ume erzeugen
-        draussen = new Raum("vor dem Haupteingang der Universit�t");
+        draussen = new Raum("vor dem Haupteingang der Universit�t", gegnerListe.get(2));
         hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
         cafeteria = new Raum("in der Cafeteria der Uni", s1);
         labor = new Raum("in einem Rechnerraum", s2);
         buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
+        flur = new Raum("im Flur", p1);
         
         // die Ausg�nge initialisieren
         draussen.setzeAusgang("east", hoersaal);
         draussen.setzeAusgang("south", labor);
         draussen.setzeAusgang("west", cafeteria);
+        draussen.setzeAusgang("north", flur);
 
         hoersaal.setzeAusgang("west", draussen);
 
@@ -97,6 +106,8 @@ class Spiel
         labor.setzeAusgang("east", buero);
 
         buero.setzeAusgang("west", labor);
+
+        flur.setzeAusgang("south", draussen);
 
         aktuellerRaum = draussen;  // das Spiel startet draussen
 
@@ -119,6 +130,11 @@ class Spiel
         while (! beendet) {
             Befehl befehl = parser.liefereBefehl();
             beendet = verarbeiteBefehl(befehl);
+            if (leben <= 0) {
+                System.out.println("\n------------------------------");
+                System.out.println("Du hast alle Leben verloren und wurdest besiegt!\n");
+                break;
+            }
         }
         System.out.println("Danke f�r dieses Spiel. Auf Wiedersehen.");
     }
@@ -146,7 +162,7 @@ class Spiel
         boolean moechteBeenden = false;
 
         if(befehl.istUnbekannt()) {
-            System.out.println("Ich wei� nicht, was Sie meinen...");
+            System.out.println("Ich weiß nicht, was Sie meinen...");
             return false;
         }
 
@@ -157,6 +173,8 @@ class Spiel
             wechsleRaum(befehl);
         else if (befehlswort.equals("answer")) {
             beantworteFrage(befehl);
+        } else if (befehlswort.equals("lives")) {
+            gibLebenAus();
         } else if (befehlswort.equals("collect")) {
             sammleHilfsmittel(befehl);
         } else if (befehlswort.equals("inv")) {
@@ -176,14 +194,14 @@ class Spiel
     /**
      * Gib Hilfsinformationen aus.
      * Hier geben wir eine etwas alberne und unklare Beschreibung
-     * aus, sowie eine Liste der Befehlsw�rter.
+     * aus, sowie eine Liste der Befehlswörter.
      */
     private void hilfstextAusgeben() 
     {
         System.out.println("Sie haben sich verlaufen. Sie sind allein.");
-        System.out.println("Sie irren auf dem Unigel�nde herum.");
+        System.out.println("Sie irren auf dem Unigelände herum.");
         System.out.println();
-        System.out.println("Ihnen stehen folgende Befehle zur Verf�gung:");
+        System.out.println("Ihnen stehen folgende Befehle zur Verfügung:");
         parser.zeigeBefehle();
     }
 
@@ -196,12 +214,18 @@ class Spiel
     {
         if(!befehl.hatZweitesWort()) {
         	// Gibt es kein zweites Wort, wissen wir nicht, wohin...
-            System.out.println("Wohin m�chten Sie gehen?");
+            System.out.println("Wohin möchten Sie gehen?");
             return;
         }
 
         if (!aktuellerRaum.isBesiegt()) {
-            System.out.println("Du kannst den Raum erst verlassen wenn du den Gegner besiegt hast");
+            System.out.println("Du kannst den Raum erst verlassen wenn du den Gegner besiegt hast\n");
+            Gegner gegner = aktuellerRaum.getGegner();
+
+            if (gegner instanceof Professor prof) {
+                System.out.println(prof.getFrage().getFrage());
+                System.out.println(prof.getFrage().getAntwortenString());
+            }
             return;
         }
 
@@ -219,7 +243,7 @@ class Spiel
     }
 
     private void beantworteFrage(Befehl befehl) {
-        if (aktuellerRaum.getGegner() == null) {
+        if (aktuellerRaum.getGegner() == null || !(aktuellerRaum.getGegner() instanceof Professor prof)) {
             System.out.println("In diesem Raum gibt es keinen Gegner der dir eine Frage stellt");
             return;
         }
@@ -228,8 +252,7 @@ class Spiel
             System.out.println("Wie lautet deine Antwort?");
             return;
         }
-
-        Frage frage = aktuellerRaum.getGegner().getFrage();
+        Frage frage = prof.getFrage();
         int richtigIDX = frage.getRichtigeAntwort();
 
         int antwort;
@@ -246,6 +269,10 @@ class Spiel
             System.out.println("Richtige Antwort, der Gegner ist besiegt");
             aktuellerRaum.setBesiegt(true);
             System.out.println(aktuellerRaum.gibLangeBeschreibung());
+        } else {
+            System.out.println("Das war die falsche Antwort, du verlierst ein Leben");
+            leben = leben - 1;
+            gibLebenAus();
         }
     }
 
@@ -298,12 +325,34 @@ class Spiel
                 System.out.println("In diesem Raum kannst du keinen Spickzettel verwenden");
                 return;
             }
-            System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(aktuellerRaum.getGegner().getFrage()));
+            Professor prof = (Professor) aktuellerRaum.getGegner();
+            System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(prof.getFrage()));
+            inventar.remove(index);
+        }
+
+        if (help.getBeschreibung().equals("Praktikumslösung")) {
+            Praktikumsloesung pl = (Praktikumsloesung) help;
+            if (aktuellerRaum.getGegner() instanceof Praktikum prak) {
+                if (prak.getAufgabe().isErfuellt()) {
+                    System.out.println("Du hast die Aufgabe in diesem Raum bereits erfolgreich gelöst");
+                    return;
+                }
+            } else {
+                System.out.println("In diesem Raum kannst du kein Praktikum bearbeiten");
+                return;
+            }
+            System.out.println("\nDu reichst die Lösung ein: \n" + prak.getAufgabe().getLoesung() + "\nDas war die richtige Lösung\n");
+            prak.getAufgabe().setErfuellt(true);
+            System.out.println("Du hast die Aufgabe in diesem Raum erfolgreich abgeschlossen");
             inventar.remove(index);
         }
 
 
 
+    }
+
+    public void gibLebenAus() {
+        System.out.println("Du hast noch " + leben + " Leben");
     }
 
     /**

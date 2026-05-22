@@ -38,7 +38,9 @@ class Raum
     public Raum(String beschreibung, Gegner gegner){
         this(beschreibung);
         setGegner(gegner);
-        besiegt = false;
+        if (gegner instanceof Professor) {
+            besiegt = false;
+        }
     }
 
     public Raum(String beschreibung, Hilfsmittel hilfsmittel) {
@@ -78,17 +80,24 @@ class Raum
      */
     public String gibLangeBeschreibung()
     {
-        if (besiegt) {
+        if (gegner == null) {
             return "Sie sind " + beschreibung + ".\n" + getHilfsmittelAlsString() + gibAusgaengeAlsString();
         }
-        else {
-            return "Sie sind " + beschreibung +
-                    ".\nDein Gegner in diesem Raum ist: " + gegner.getName() +
-                    "\nUm ihn zu besiegen musst du seine Frage korrekt beantworten, sonst verlierst du ein Leben" +
-                    "\nFrage: " + gegner.getFrage().getFrage() +
-                    gegner.getFrage().getAntwortenString();
-
+        else if (gegner instanceof Professor prof && !besiegt) {
+                return "Sie sind " + beschreibung +
+                        ".\nDein Gegner in diesem Raum ist: " + prof.getName() +
+                        "\nUm ihn zu besiegen musst du seine Frage korrekt beantworten, sonst verlierst du ein Leben" +
+                        "\nFrage: " + prof.getFrage().getFrage() +
+                        prof.getFrage().getAntwortenString();
         }
+        if (gegner instanceof Praktikum prak && !prak.getAufgabe().isErfuellt()) {
+            return "Sie sind " + beschreibung +
+                    ".\nDein Gegner in diesem Raum ist: " + prak.getName() +
+                    "\nUm es zu besiegen musst du eine Praktikumslösung finden und sie vorlegen, sonst wirst du niemals dein Studium schaffen" +
+                    "\nDeine Aufgabe lautet: " + prak.getAufgabe().getBeschreibung()
+                    + "\n" + gibAusgaengeAlsString();
+        }
+        else {return "Sie sind " + beschreibung + ".\n" + getHilfsmittelAlsString() + gibAusgaengeAlsString();}
     }
 
     /**
