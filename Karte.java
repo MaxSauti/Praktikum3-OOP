@@ -17,4 +17,25 @@ public class Karte {
             }
         }
     }
+
+    public void printKarte(Raum[][] raumArr, Raum aktuellerRaum){
+        for (Raum[] raumUA : raumArr){
+            boolean raeumeEx = false;
+            for (Raum raum : raumUA) {
+                if (raum == null) {
+                    System.out.print("     ");
+                } else if (raum == aktuellerRaum) {
+                    System.out.print(" POS ");
+                    raeumeEx = true;
+                } else {
+                    System.out.print(" RAU ");
+                    raeumeEx = true;
+                }
+            }
+            if (raeumeEx) {
+                System.out.println();
+            }
+        }
+        System.out.println();
+    }
 }

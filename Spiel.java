@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 /**
@@ -22,11 +21,15 @@ import java.util.ArrayList;
 
 class Spiel 
 {
-    private int leben;
+    private Raum[][] raumArr = new Raum[10][10];
+    private int hoffnung;
+    private boolean alleBesiegt = false;
+    private Karte karte;
     private Parser parser;
     private Raum aktuellerRaum;
     private ArrayList<Gegner> gegnerListe = new ArrayList<>();
     private ArrayList<Frage> fragenListe = new ArrayList<>();
+    private ArrayList<Raum> raumListe = new ArrayList<>();
     private ArrayList<Hilfsmittel> inventar = new ArrayList<>();
         
     
@@ -41,7 +44,8 @@ class Spiel
      */
     public Spiel() 
     {
-        leben = 5;
+        karte = new Karte();
+        hoffnung = 3;
         fragenAnlegen();
         gegnerAnlegen();
         raeumeAnlegen();
@@ -70,7 +74,7 @@ class Spiel
         gegner2 = new Professor("Informatikprofessor", fragenListe.get(1));
         gegnerListe.add(gegner2);
 
-        Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E");
+        Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E)");
         gegner3 = new Praktikum("Theoretische Informatik", ti);
         gegnerListe.add(gegner3);
     }
@@ -86,33 +90,38 @@ class Spiel
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
         // die R�ume erzeugen
         draussen = new Raum("vor dem Haupteingang der Universit�t", gegnerListe.get(2));
+        raumListe.add(draussen);
         hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
+        raumListe.add(hoersaal);
         cafeteria = new Raum("in der Cafeteria der Uni", s1);
+        raumListe.add(cafeteria);
         labor = new Raum("in einem Rechnerraum", s2);
+        raumListe.add(labor);
         buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
+        raumListe.add(buero);
         flur = new Raum("im Flur", p1);
-        
-        // die Ausg�nge initialisieren
-        draussen.setzeAusgang("east", hoersaal);
-        draussen.setzeAusgang("south", labor);
-        draussen.setzeAusgang("west", cafeteria);
-        draussen.setzeAusgang("north", flur);
+        raumListe.add(flur);
 
-        hoersaal.setzeAusgang("west", draussen);
+        raumArr[0] = new Raum[]{null, null, null, null, flur, null, null, null, null, null};
+        raumArr[1] = new Raum[]{null, null, null, cafeteria, draussen, hoersaal, null, null, null, null};
+        raumArr[2] = new Raum[]{null, null, null, null, labor, buero, null, null, null, null};
 
-        cafeteria.setzeAusgang("east", draussen);
-
-        labor.setzeAusgang("north", draussen);
-        labor.setzeAusgang("east", buero);
-
-        buero.setzeAusgang("west", labor);
-
-        flur.setzeAusgang("south", draussen);
+        for (int i = 1; i < 10; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (raumArr[i][j] != null) {
+                    if (raumArr[i - 1][j] != null) {
+                        raumArr[i][j].setzeAusgang("north", raumArr[i - 1][j]);
+                        raumArr[i - 1][j].setzeAusgang("south", raumArr[i][j]);
+                    }
+                    if (raumArr[i][j + 1] != null) {
+                        raumArr[i][j].setzeAusgang("east", raumArr[i][j + 1]);
+                        raumArr[i][j + 1].setzeAusgang("west", raumArr[i][j]);
+                    }
+                }
+            }
+        }
 
         aktuellerRaum = draussen;  // das Spiel startet draussen
-
-        Karte k1 = new Karte();
-        k1.sucheRaueme(aktuellerRaum);
     }
 
     /**
@@ -130,9 +139,9 @@ class Spiel
         while (! beendet) {
             Befehl befehl = parser.liefereBefehl();
             beendet = verarbeiteBefehl(befehl);
-            if (leben <= 0) {
+            if (hoffnung <= 0) {
                 System.out.println("\n------------------------------");
-                System.out.println("Du hast alle Leben verloren und wurdest besiegt!\n");
+                System.out.println("Du hast jegliche Hoffnung verloren und gibst auf!\n");
                 break;
             }
         }
@@ -182,6 +191,9 @@ class Spiel
         }
         else if (befehlswort.equals("use")) {
             nutzeHilfsmittel(befehl);
+        }
+        else if (befehlswort.equals("map")) {
+            karte.printKarte(raumArr, aktuellerRaum);
         }
         else if (befehlswort.equals("quit")) {
             moechteBeenden = beenden(befehl);
@@ -270,8 +282,8 @@ class Spiel
             aktuellerRaum.setBesiegt(true);
             System.out.println(aktuellerRaum.gibLangeBeschreibung());
         } else {
-            System.out.println("Das war die falsche Antwort, du verlierst ein Leben");
-            leben = leben - 1;
+            System.out.println("Das war die falsche Antwort, du verlierst Hoffnung");
+            hoffnung = hoffnung - 1;
             gibLebenAus();
         }
     }
@@ -345,6 +357,18 @@ class Spiel
             prak.getAufgabe().setErfuellt(true);
             System.out.println("Du hast die Aufgabe in diesem Raum erfolgreich abgeschlossen");
             inventar.remove(index);
+            alleBesiegt = true;
+            for (Gegner gegner : gegnerListe) {
+                if (gegner instanceof Praktikum prak2) {
+                    if (!prak2.getAufgabe().isErfuellt()) {
+                        alleBesiegt = false;
+                        break;
+                    }
+                }
+            }
+            if (alleBesiegt) {
+                System.out.println("Du hast alle Praktika bestanden und bist somit bereit für die Abschlussprüfung");
+            }
         }
 
 
@@ -352,7 +376,7 @@ class Spiel
     }
 
     public void gibLebenAus() {
-        System.out.println("Du hast noch " + leben + " Leben");
+        System.out.println("Du hast noch " + hoffnung + " Hoffnung");
     }
 
     /**
