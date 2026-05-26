@@ -39,7 +39,7 @@ class Raum
     public Raum(String beschreibung, Gegner gegner){
         this(beschreibung);
         setGegner(gegner);
-        if (gegner instanceof Professor) {
+        if (gegner instanceof Professor || gegner instanceof Abschlusspruefung) {
             besiegt = false;
         }
     }
@@ -97,6 +97,9 @@ class Raum
                     "\nUm es zu besiegen musst du eine Praktikumslösung finden und sie vorlegen, sonst wirst du niemals dein Studium schaffen" +
                     "\nDeine Aufgabe lautet: " + prak.getAufgabe().getBeschreibung()
                     + "\n" + gibAusgaengeAlsString();
+        }
+        if (gegner instanceof Abschlusspruefung fin) {
+            return "Jetzt beginnt deine Abschlussprüfung, ich hoffe du hast gut gelernt oder ein paar Hilfsmittel dabei";
         }
         else {return "Sie sind " + beschreibung + ".\n" + getHilfsmittelAlsString() + gibAusgaengeAlsString();}
     }

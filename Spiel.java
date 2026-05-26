@@ -132,29 +132,30 @@ class Spiel
         Gegner gegner1, gegner2, gegner3, gegner4, gegner5, gegner6, finals;
 
         gegner1 = new Professor("Matheprofessor", fragenListe.get(0));
-        gegnerListe.add(gegner1);
+        gegnerListe.add(0, gegner1);
 
         gegner2 = new Professor("Informatikprofessor", fragenListe.get(1));
-        gegnerListe.add(gegner2);
+        gegnerListe.add(1, gegner2);
 
         Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E)");
         gegner3 = new Praktikum("Theoretische Informatik", ti);
-        gegnerListe.add(gegner3);
+        gegnerListe.add(4, gegner3);
 
         gegner4 = new Professor("BWL Professor", fragenListe.get(2));
-        gegnerListe.add(gegner4);
+        gegnerListe.add(2, gegner4);
 
         gegner5 = new Professor("Informatikprofessor spez. Betriebssysteme", fragenListe.get(3));
-        gegnerListe.add(gegner5);
+        gegnerListe.add(3, gegner5);
 
         Aufgabe pse = new Aufgabe("Was steht in der ersten Zeile eines HTTP-Request und durch welchen Header erreicht man VirtualHosting?",
-                "In der ersten Zeile stehen, die Methode (meist GET), die Ressource und die HTTP-Version.\nAlle mit Leereichen getrennt." +
+                "In der ersten Zeile stehen, die Methode (meist GET), die Ressource und die HTTP-Version." +
+                        "\nAlle mit Leereichen getrennt." +
                         "\nVirtualHosting kann durch den Host Header erreicht werden");
         gegner6 = new Praktikum("Projekt-Systementwicklung", pse);
-        gegnerListe.add(gegner6);
+        gegnerListe.add(5, gegner6);
 
         finals = new Abschlusspruefung("Abschlussprüfung", abschluss);
-        gegnerListe.add(finals);
+        gegnerListe.add(6, finals);
     }
 
     /**
@@ -162,25 +163,42 @@ class Spiel
      */
     private void raeumeAnlegen()
     {
-        Raum draussen, hoersaal, cafeteria, labor, buero, flur, toilette, archiv, bibliothek;
+        Raum draussen, kammer, hoersaal1, hoersaal2, cafeteria, labor1, labor2, buero1, buero2, flur1, flur2, flur3, flur4, flur5, toilette, archiv, bibliothek, abschluss;
         Hilfsmittel s1 = new Spickzettel("Spickzettel");
         Hilfsmittel s2 = new Spickzettel("Spickzettel");
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
+        Hilfsmittel p2 = new Praktikumsloesung("Praktikumslösung");
         // die R�ume erzeugen
         draussen = new Raum("vor dem Haupteingang der Universit�t");
-        hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
-        cafeteria = new Raum("in der Cafeteria der Uni", s1);
-        labor = new Raum("in einem Rechnerraum", s2);
-        buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(2));
-        flur = new Raum("im Flur", p1);
-        toilette = new Raum("im Badezimmer");
-        toilette.setSecret(true);
-        archiv = new Raum("im Archiv", gegnerListe.get(1));
-        bibliothek = new Raum("in der Bibliothek", gegnerListe.get(6));
+        cafeteria = new Raum("in der Cafeteria der Uni");
+        toilette = new Raum("im Badezimmer", s1);
+        flur1 = new Raum("im Flur" , p1);
+        kammer = new Raum("in einer Abstellkammer", s2);
+        archiv = new Raum("im Archiv");
+        bibliothek = new Raum("in der Bibliothek", p2);
+        flur2 = new Raum("im Flur");
+        flur3 = new Raum("im Flur");
+        flur4 = new Raum("im Flur");
+        flur4.setSecret(true);
+        flur5 = new Raum("im Flur");
+        flur5.setSecret(true);
 
-        raumArr[0] = new Raum[]{null, null, null, null, flur, toilette, archiv, bibliothek, null, null};
-        raumArr[1] = new Raum[]{null, null, null, cafeteria, draussen, hoersaal, null, null, null, null};
-        raumArr[2] = new Raum[]{null, null, null, null, labor, buero, null, null, null, null};
+        labor1 = new Raum("in einem Rechnerraum", gegnerListe.get(4));
+        labor2 = new Raum("in einem Rechnerraum", gegnerListe.get(5));
+
+        hoersaal1 = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
+        buero1 = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
+        hoersaal2 = new Raum("in einem Hörsaal der BWL", gegnerListe.get(2));
+        buero2 = new Raum("in einem Büro eines Betriebssystemspezialisten", gegnerListe.get(3));
+
+        abschluss = new Raum("im finalen Level", gegnerListe.get(6));
+
+        raumArr[0] = new Raum[]{null, null, null, null, null, null, null, null, null, null};
+        raumArr[1] = new Raum[]{bibliothek, null, buero2, null, labor1, flur4, flur5, abschluss, null, null};
+        raumArr[2] = new Raum[]{flur2, labor2, archiv, buero1, flur1, null, null, null, null, null};
+        raumArr[3] = new Raum[]{null, null, null, null, draussen, null, null, null, null, null};
+        raumArr[4] = new Raum[]{null, null, kammer, archiv, toilette, null, null, null, null, null};
+        raumArr[5] = new Raum[]{null, hoersaal2, flur3, null, cafeteria, hoersaal1, null, null, null, null};
 
         for (int i = 1; i < 10; i++) {
             for (int j = 0; j < 9; j++) {
@@ -226,8 +244,24 @@ class Spiel
                 System.out.println("Du hast jegliche Hoffnung verloren und gibst auf!\n");
                 break;
             }
+            if (aktuellerRaum.getGegner() instanceof Abschlusspruefung fin) {
+                while (fin.getFrageNr() < 5) {
+                    fin.stelleFragen(fin.getFrageNr());
+                    befehl = parser.liefereBefehl();
+                    beendet = verarbeiteBefehl(befehl);
+                }
+                System.out.println("Du hast " + fin.getRichtigeAntworten() + "/5 Fragen richtig beantwortet");
+                if (fin.getRichtigeAntworten() >= 3) {
+                    fin.setBestanden(true);
+                    System.out.println("Herzlichen Glückwunsch, du hast bestanden!!!");
+                    break;
+                } else {
+                    System.out.println("Das war leider nichts, wenn du möchtest kannst du es nochmal von neu versuchen");
+                    break;
+                }
+            }
         }
-        System.out.println("Danke f�r dieses Spiel. Auf Wiedersehen.");
+        System.out.println("Danke fÜr dieses Spiel. Auf Wiedersehen.");
     }
     
     /**
@@ -331,7 +365,7 @@ class Spiel
         Raum naechsterRaum = aktuellerRaum.gibAusgang(richtung);
 
         if (naechsterRaum == null)
-            System.out.println("Dort ist keine T�r!");
+            System.out.println("Dort ist keine Tür!");
         else if (alleBesiegt == false && naechsterRaum.isSecret()) {
             System.out.println("Diesen Raum kannst du noch nicht betreten");
         } else {
@@ -341,7 +375,7 @@ class Spiel
     }
 
     private void beantworteFrage(Befehl befehl) {
-        if (aktuellerRaum.getGegner() == null || !(aktuellerRaum.getGegner() instanceof Professor prof)) {
+        if (aktuellerRaum.getGegner() == null || (aktuellerRaum.getGegner() instanceof Praktikum prak)) {
             System.out.println("In diesem Raum gibt es keinen Gegner der dir eine Frage stellt");
             return;
         }
@@ -350,27 +384,44 @@ class Spiel
             System.out.println("Wie lautet deine Antwort?");
             return;
         }
-        Frage frage = prof.getFrage();
-        int richtigIDX = frage.getRichtigeAntwort();
+        if ((aktuellerRaum.getGegner() instanceof Professor prof)) {
+            Frage frage = prof.getFrage();
+            int richtigIDX = frage.getRichtigeAntwort();
 
-        int antwort;
+            int antwort;
 
-        try {
-            antwort = Integer.parseInt(befehl.gibZweitesWort());
-        } catch (NumberFormatException ignored) {
-            System.out.println("Gib bitte eine verfügbare Zahl an");
-            return;
+            try {
+                antwort = Integer.parseInt(befehl.gibZweitesWort());
+            } catch (NumberFormatException ignored) {
+                System.out.println("Gib bitte eine verfügbare Zahl an");
+                return;
+            }
+
+
+            if (antwort - 1 == richtigIDX) {
+                System.out.println("Richtige Antwort, der Gegner ist besiegt");
+                aktuellerRaum.setBesiegt(true);
+                System.out.println(aktuellerRaum.gibLangeBeschreibung());
+            } else {
+                System.out.println("Das war die falsche Antwort, du verlierst Hoffnung");
+                hoffnung = hoffnung - 1;
+                gibLebenAus();
+            }
         }
 
-
-        if (antwort - 1 == richtigIDX) {
-            System.out.println("Richtige Antwort, der Gegner ist besiegt");
-            aktuellerRaum.setBesiegt(true);
-            System.out.println(aktuellerRaum.gibLangeBeschreibung());
-        } else {
-            System.out.println("Das war die falsche Antwort, du verlierst Hoffnung");
-            hoffnung = hoffnung - 1;
-            gibLebenAus();
+        if ((aktuellerRaum.getGegner() instanceof Abschlusspruefung fin)) {
+            int antwort;
+            try {
+                antwort = Integer.parseInt(befehl.gibZweitesWort());
+            } catch (NumberFormatException ignored) {
+                System.out.println("Gib bitte eine verfügbare Zahl an");
+                return;
+            }
+            if (fin.getFragen()[fin.getFrageNr()].getRichtigeAntwort() == antwort - 1) {
+                fin.setRichtigeAntworten();
+                fin.setFrageNr();
+            }
+            else { fin.setFrageNr(); };
         }
     }
 
@@ -423,8 +474,13 @@ class Spiel
                 System.out.println("In diesem Raum kannst du keinen Spickzettel verwenden");
                 return;
             }
-            Professor prof = (Professor) aktuellerRaum.getGegner();
-            System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(prof.getFrage()));
+            if (aktuellerRaum.getGegner() instanceof Professor prof) {
+                //prof = (Professor) aktuellerRaum.getGegner();
+                System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(prof.getFrage()));
+            }
+            if (aktuellerRaum.getGegner() instanceof Abschlusspruefung fin) {
+                System.out.println("Die richtige Antwort ist: " + spicker.richtigeAntwort(fin.getFragen()[fin.getFrageNr()]));
+            }
             inventar.remove(index);
         }
 

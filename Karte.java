@@ -37,8 +37,11 @@ public class Karte {
                     }
                     raeumeEx = true;
                 } else {
-                    if (bereit) {
+                    if (bereit && raum.getGegner() == null) {
                         System.out.print(" SEC ");
+                        raeumeEx = true;
+                    } else if (bereit && raum.getGegner() instanceof Abschlusspruefung) {
+                        System.out.println(" FIN ");
                         raeumeEx = true;
                     } else {
                         System.out.print("     ");
