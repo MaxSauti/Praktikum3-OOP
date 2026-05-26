@@ -29,7 +29,6 @@ class Spiel
     private Raum aktuellerRaum;
     private ArrayList<Gegner> gegnerListe = new ArrayList<>();
     private ArrayList<Frage> fragenListe = new ArrayList<>();
-    private ArrayList<Raum> raumListe = new ArrayList<>();
     private ArrayList<Hilfsmittel> inventar = new ArrayList<>();
         
     
@@ -90,22 +89,17 @@ class Spiel
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
         // die R�ume erzeugen
         draussen = new Raum("vor dem Haupteingang der Universit�t", gegnerListe.get(2));
-        raumListe.add(draussen);
         hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
-        raumListe.add(hoersaal);
         cafeteria = new Raum("in der Cafeteria der Uni", s1);
-        raumListe.add(cafeteria);
         labor = new Raum("in einem Rechnerraum", s2);
-        raumListe.add(labor);
         buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
-        raumListe.add(buero);
         flur = new Raum("im Flur", p1);
-        raumListe.add(flur);
         toilette = new Raum("im Badezimmer");
-        raumListe.add(toilette);
         toilette.setSecret(true);
+        archiv = new Raum("im Archiv");
+        bibliothek = new Raum("in der Bibliothek");
 
-        raumArr[0] = new Raum[]{null, null, null, null, flur, toilette, null, null, null, null};
+        raumArr[0] = new Raum[]{null, null, null, null, flur, toilette, archiv, bibliothek, null, null};
         raumArr[1] = new Raum[]{null, null, null, cafeteria, draussen, hoersaal, null, null, null, null};
         raumArr[2] = new Raum[]{null, null, null, null, labor, buero, null, null, null, null};
 

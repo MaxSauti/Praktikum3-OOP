@@ -36,9 +36,14 @@ public class Karte {
                         System.out.print(" RAU ");
                     }
                     raeumeEx = true;
-                } else if (raum.isSecret() && bereit) {
-                    System.out.print(" SEC ");
-                    raeumeEx = true;
+                } else {
+                    if (bereit) {
+                        System.out.print(" SEC ");
+                        raeumeEx = true;
+                    } else {
+                        System.out.print("     ");
+                    }
+
                 }
             }
             if (raeumeEx) {
