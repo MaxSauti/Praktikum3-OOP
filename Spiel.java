@@ -22,6 +22,7 @@ import java.util.ArrayList;
 class Spiel 
 {
     private Raum[][] raumArr = new Raum[10][10];
+    Frage[] abschluss;
     private int hoffnung;
     private boolean alleBesiegt = false;
     private Karte karte;
@@ -62,10 +63,73 @@ class Spiel
         anworten2 = new String[]{"Vererbung", "Objektreferenzen", "Polymorphie", "Redundanz"};
         frage2 = new Frage("Was beschreibt das Überladen von Methoden?", 2, anworten2);
         fragenListe.add(frage2);
+
+        antworten3 = new String[]{
+                "Die Planung und Steuerung der betrieblichen Abläufe",
+                "Die Analyse der Zahlungsströme eines Unternehmens",
+                "Die Ermittlung des Unternehmenserfolgs durch Gegenüberstellung von Kosten und Leistungen",
+                "Die Untersuchung von Marktanteilen im Wettbewerb"
+        };
+        frage3 = new Frage("Was ist die zentrale Aufgabe der Kosten- und Leistungsrechnung?", 2, antworten3);
+        fragenListe.add(frage3);
+
+        antworten4 = new String[]{
+                "Ein Zustand, in dem ein Prozess auf die CPU-Zuteilung wartet",
+                "Ein Zustand, in dem ein Prozess im Ready-Queue verharrt",
+                "Ein Zustand, in dem ein Prozess auf Ein-/Ausgabeoperationen wartet",
+                "Ein Zustand, in dem mehrere Prozesse gegenseitig auf Ressourcen warten und keiner fortfahren kann"
+        };
+        frage4 = new Frage("Was beschreibt einen Deadlock in Betriebssystemen am besten?", 3, antworten4);
+        fragenListe.add(frage4);
+
+        Frage frageFinal1, frageFinal2, frageFinal3, frageFinal4, frageFinal5;
+        String[] antwortenFinal1, antwortenFinal2, antwortenFinal3, antwortenFinal4, antwortenFinal5;
+
+        antwortenFinal1 = new String[]{
+                "Die Fähigkeit eines Unternehmens, langfristige Kredite aufzunehmen",
+                "Die Fähigkeit eines Unternehmens, seine kurzfristigen Zahlungsverpflichtungen zu erfüllen",
+                "Die Fähigkeit eines Unternehmens, Gewinne zu maximieren",
+                "Die Fähigkeit eines Unternehmens, seine Fixkosten zu senken"
+        };
+        frageFinal1 = new Frage("Was beschreibt die Liquidität eines Unternehmens?", 1, antwortenFinal1);
+
+        antwortenFinal2 = new String[]{
+                "Die Anzahl der benötigten CPU-Kerne",
+                "Die maximale Größe des verwendeten Arrays",
+                "Die Laufzeit- oder Speicherentwicklung eines Algorithmus in Abhängigkeit der Eingabegröße",
+                "Die Anzahl der verwendeten Programmiersprachen"
+        };
+        frageFinal2 = new Frage("Was beschreibt die algorithmische Komplexität?", 2, antwortenFinal2);
+
+        antwortenFinal3 = new String[]{
+                "f'(x) = 2x",
+                "f'(x) = 3x^2",
+                "f'(x) = x^3",
+                "f'(x) = 2"
+        };
+        frageFinal3 = new Frage("Wie lautet die Ableitung der Funktion f(x) = x^2?", 0, antwortenFinal3);
+
+        antwortenFinal4 = new String[]{
+                "Eine Tabelle ohne Primärschlüssel",
+                "Eine Tabelle, die nur aus Fremdschlüsseln besteht",
+                "Eine Tabelle, die Redundanzen und Anomalien minimiert",
+                "Eine Tabelle, die ausschließlich numerische Werte enthält"
+        };
+        frageFinal4 = new Frage("Was ist das Ziel der Normalisierung in relationalen Datenbanken?", 2, antwortenFinal4);
+
+        antwortenFinal5 = new String[]{
+                "Die Berechnung des optimalen Lagerbestands",
+                "Die Bewertung einer Investition anhand zukünftiger Ein- und Auszahlungen",
+                "Die Analyse der Mitarbeiterzufriedenheit",
+                "Die Ermittlung der optimalen Produktionsmenge"
+        };
+        frageFinal5 = new Frage("Was ist das Ziel der Kapitalwertmethode?", 1, antwortenFinal5);
+
+        abschluss = new Frage[]{frageFinal1, frageFinal2, frageFinal3, frageFinal4, frageFinal5};
     }
 
     private void gegnerAnlegen(){
-        Gegner gegner1, gegner2, gegner3, gegner4;
+        Gegner gegner1, gegner2, gegner3, gegner4, gegner5, gegner6, finals;
 
         gegner1 = new Professor("Matheprofessor", fragenListe.get(0));
         gegnerListe.add(gegner1);
@@ -76,6 +140,21 @@ class Spiel
         Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E)");
         gegner3 = new Praktikum("Theoretische Informatik", ti);
         gegnerListe.add(gegner3);
+
+        gegner4 = new Professor("BWL Professor", fragenListe.get(2));
+        gegnerListe.add(gegner4);
+
+        gegner5 = new Professor("Informatikprofessor spez. Betriebssysteme", fragenListe.get(3));
+        gegnerListe.add(gegner5);
+
+        Aufgabe pse = new Aufgabe("Was steht in der ersten Zeile eines HTTP-Request und durch welchen Header erreicht man VirtualHosting?",
+                "In der ersten Zeile stehen, die Methode (meist GET), die Ressource und die HTTP-Version.\nAlle mit Leereichen getrennt." +
+                        "\nVirtualHosting kann durch den Host Header erreicht werden");
+        gegner6 = new Praktikum("Projekt-Systementwicklung", pse);
+        gegnerListe.add(gegner6);
+
+        finals = new Abschlusspruefung("Abschlussprüfung", abschluss);
+        gegnerListe.add(finals);
     }
 
     /**
@@ -88,16 +167,16 @@ class Spiel
         Hilfsmittel s2 = new Spickzettel("Spickzettel");
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
         // die R�ume erzeugen
-        draussen = new Raum("vor dem Haupteingang der Universit�t", gegnerListe.get(2));
+        draussen = new Raum("vor dem Haupteingang der Universit�t");
         hoersaal = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
         cafeteria = new Raum("in der Cafeteria der Uni", s1);
         labor = new Raum("in einem Rechnerraum", s2);
-        buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
+        buero = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(2));
         flur = new Raum("im Flur", p1);
         toilette = new Raum("im Badezimmer");
         toilette.setSecret(true);
-        archiv = new Raum("im Archiv");
-        bibliothek = new Raum("in der Bibliothek");
+        archiv = new Raum("im Archiv", gegnerListe.get(1));
+        bibliothek = new Raum("in der Bibliothek", gegnerListe.get(6));
 
         raumArr[0] = new Raum[]{null, null, null, null, flur, toilette, archiv, bibliothek, null, null};
         raumArr[1] = new Raum[]{null, null, null, cafeteria, draussen, hoersaal, null, null, null, null};
@@ -114,11 +193,11 @@ class Spiel
                         raumArr[i][j].setzeAusgang("east", raumArr[i][j + 1]);
                         raumArr[i][j + 1].setzeAusgang("west", raumArr[i][j]);
                     }
-                    if (i == 1) {
-                        if (raumArr[i-1][j] != null && raumArr[i - 1][j + 1] != null) {
-                            raumArr[i-1][j].setzeAusgang("east", raumArr[i-1][j + 1]);
-                            raumArr[i-1][j + 1].setzeAusgang("west", raumArr[i-1][j]);
-                        }
+                }
+                if (i == 1) {
+                    if (raumArr[i-1][j] != null && raumArr[i - 1][j + 1] != null) {
+                        raumArr[i-1][j].setzeAusgang("east", raumArr[i-1][j + 1]);
+                        raumArr[i-1][j + 1].setzeAusgang("west", raumArr[i-1][j]);
                     }
                 }
             }
@@ -157,9 +236,11 @@ class Spiel
     private void willkommenstextAusgeben()
     {
         System.out.println();
-        System.out.println("Willkommen zu Zuul!");
-        System.out.println("Zuul ist ein neues, unglaublich langweiliges Spiel.");
-        System.out.println("Tippen sie 'help', wenn Sie Hilfe brauchen.");
+        System.out.println("Willkommen zum Unisimulator!");
+        System.out.println("Du spielst hier das Leben eines Studenten nach.");
+        System.out.println("Dein Ziel ist es, die Abschlussprüfung zu meistern.");
+        System.out.println("Um für diese zugelassen zu werden musst du allerdings erstmal alle Praktika bestehen");
+        System.out.println("Tippe 'help', wenn du Hilfe brauchst.");
         System.out.println();
         System.out.println(aktuellerRaum.gibLangeBeschreibung());
     }
