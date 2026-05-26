@@ -19,14 +19,23 @@ public class Karte {
     }
 
     public void printKarte(Raum[][] raumArr, Raum aktuellerRaum, boolean bereit){
+        System.out.println();
         for (Raum[] raumUA : raumArr){
             boolean raeumeEx = false;
+            for (Raum raum : raumUA) {
+                if (raum != null) {
+                    raeumeEx = true;
+                    break;
+                }
+            }
+            if (!raeumeEx) {
+                continue;
+            }
             for (Raum raum : raumUA) {
                 if (raum == null) {
                     System.out.print("     ");
                 } else if (raum == aktuellerRaum) {
                     System.out.print(" POS ");
-                    raeumeEx = true;
                 } else if (!raum.isSecret()) {
                     if (raum.getGegner() != null) {
                         System.out.print("!RAU!");
@@ -35,23 +44,18 @@ public class Karte {
                     } else {
                         System.out.print(" RAU ");
                     }
-                    raeumeEx = true;
                 } else {
                     if (bereit && raum.getGegner() == null) {
                         System.out.print(" SEC ");
-                        raeumeEx = true;
                     } else if (bereit && raum.getGegner() instanceof Abschlusspruefung) {
-                        System.out.println(" FIN ");
-                        raeumeEx = true;
+                        System.out.print(" FIN ");
                     } else {
                         System.out.print("     ");
                     }
 
                 }
             }
-            if (raeumeEx) {
-                System.out.println();
-            }
+            System.out.println();
         }
         System.out.println();
     }

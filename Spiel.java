@@ -137,15 +137,15 @@ class Spiel
         gegner2 = new Professor("Informatikprofessor", fragenListe.get(1));
         gegnerListe.add(1, gegner2);
 
-        Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E)");
-        gegner3 = new Praktikum("Theoretische Informatik", ti);
-        gegnerListe.add(4, gegner3);
-
         gegner4 = new Professor("BWL Professor", fragenListe.get(2));
         gegnerListe.add(2, gegner4);
 
         gegner5 = new Professor("Informatikprofessor spez. Betriebssysteme", fragenListe.get(3));
         gegnerListe.add(3, gegner5);
+
+        Aufgabe ti = new Aufgabe("Durch welches Tupel wird ein DEA definiert?", "M = (Z, Sigma, Delta, z0, E)");
+        gegner3 = new Praktikum("Theoretische Informatik", ti);
+        gegnerListe.add(4, gegner3);
 
         Aufgabe pse = new Aufgabe("Was steht in der ersten Zeile eines HTTP-Request und durch welchen Header erreicht man VirtualHosting?",
                 "In der ersten Zeile stehen, die Methode (meist GET), die Ressource und die HTTP-Version." +
@@ -163,7 +163,7 @@ class Spiel
      */
     private void raeumeAnlegen()
     {
-        Raum draussen, kammer, hoersaal1, hoersaal2, cafeteria, labor1, labor2, buero1, buero2, flur1, flur2, flur3, flur4, flur5, toilette, archiv, bibliothek, abschluss;
+        Raum draussen, kammer, hoersaal1, hoersaal2, cafeteria, labor1, labor2, buero1, buero2, flur1, flur2, flur3, flur4, flur5, toilette, archiv, archiv2, bibliothek, abschluss;
         Hilfsmittel s1 = new Spickzettel("Spickzettel");
         Hilfsmittel s2 = new Spickzettel("Spickzettel");
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
@@ -175,6 +175,7 @@ class Spiel
         flur1 = new Raum("im Flur" , p1);
         kammer = new Raum("in einer Abstellkammer", s2);
         archiv = new Raum("im Archiv");
+        archiv2 = new Raum("im Archiv");
         bibliothek = new Raum("in der Bibliothek", p2);
         flur2 = new Raum("im Flur");
         flur3 = new Raum("im Flur");
@@ -192,30 +193,32 @@ class Spiel
         buero2 = new Raum("in einem Büro eines Betriebssystemspezialisten", gegnerListe.get(3));
 
         abschluss = new Raum("im finalen Level", gegnerListe.get(6));
+        abschluss.setSecret(true);
 
         raumArr[0] = new Raum[]{null, null, null, null, null, null, null, null, null, null};
         raumArr[1] = new Raum[]{bibliothek, null, buero2, null, labor1, flur4, flur5, abschluss, null, null};
         raumArr[2] = new Raum[]{flur2, labor2, archiv, buero1, flur1, null, null, null, null, null};
         raumArr[3] = new Raum[]{null, null, null, null, draussen, null, null, null, null, null};
-        raumArr[4] = new Raum[]{null, null, kammer, archiv, toilette, null, null, null, null, null};
+        raumArr[4] = new Raum[]{null, null, kammer, archiv2, toilette, null, null, null, null, null};
         raumArr[5] = new Raum[]{null, hoersaal2, flur3, null, cafeteria, hoersaal1, null, null, null, null};
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 9; j++) {
-                if (raumArr[i][j] != null) {
-                    if (raumArr[i - 1][j] != null) {
-                        raumArr[i][j].setzeAusgang("north", raumArr[i - 1][j]);
-                        raumArr[i - 1][j].setzeAusgang("south", raumArr[i][j]);
-                    }
-                    if (raumArr[i][j + 1] != null) {
+                if (i == 0) {
+                    if (raumArr[i][j] != null && raumArr[i][j + 1] != null) {
                         raumArr[i][j].setzeAusgang("east", raumArr[i][j + 1]);
                         raumArr[i][j + 1].setzeAusgang("west", raumArr[i][j]);
                     }
-                }
-                if (i == 1) {
-                    if (raumArr[i-1][j] != null && raumArr[i - 1][j + 1] != null) {
-                        raumArr[i-1][j].setzeAusgang("east", raumArr[i-1][j + 1]);
-                        raumArr[i-1][j + 1].setzeAusgang("west", raumArr[i-1][j]);
+                } else {
+                    if (raumArr[i][j] != null) {
+                        if (raumArr[i - 1][j] != null) {
+                            raumArr[i][j].setzeAusgang("north", raumArr[i - 1][j]);
+                            raumArr[i - 1][j].setzeAusgang("south", raumArr[i][j]);
+                        }
+                        if (raumArr[i][j + 1] != null) {
+                            raumArr[i][j].setzeAusgang("east", raumArr[i][j + 1]);
+                            raumArr[i][j + 1].setzeAusgang("west", raumArr[i][j]);
+                        }
                     }
                 }
             }
