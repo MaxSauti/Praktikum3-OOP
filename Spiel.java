@@ -275,8 +275,10 @@ class Spiel
         System.out.println();
         System.out.println("Willkommen zum Unisimulator!");
         System.out.println("Du spielst hier das Leben eines Studenten nach.");
-        System.out.println("Dein Ziel ist es, die Abschlussprüfung zu meistern.");
+        System.out.println("Dein Ziel ist es, die Abschlussprüfung zu meistern. Einmal begonnen gibt es kein Zurück mehr");
         System.out.println("Um für diese zugelassen zu werden musst du allerdings erstmal alle Praktika bestehen");
+        System.out.println("Wenn du es dir einfach machen möchtest kannst du auf dem Gelände nach Spickzetteln suchen,");
+        System.out.println("aber Vorsicht, überall lauern Professoren, die dir mit ihren Fragen deine Hoffnung auf einen Abschluss klauen.");
         System.out.println("Tippe 'help', wenn du Hilfe brauchst.");
         System.out.println();
         System.out.println(aktuellerRaum.gibLangeBeschreibung());
@@ -405,7 +407,13 @@ class Spiel
                 System.out.println("Richtige Antwort, der Gegner ist besiegt");
                 aktuellerRaum.setBesiegt(true);
                 System.out.println(aktuellerRaum.gibLangeBeschreibung());
+                if (hoffnung < 3 && prof.tryCount() == 0) {
+                    System.out.println("Du hast beim ersten Mal richtig geantwortet und erhältst einen Hoffnungsboost.");
+                    hoffnung++;
+                    gibLebenAus();
+                }
             } else {
+                prof.setTryCount();
                 System.out.println("Das war die falsche Antwort, du verlierst Hoffnung");
                 hoffnung = hoffnung - 1;
                 gibLebenAus();
