@@ -18,7 +18,7 @@ public class Karte {
         }
     }
 
-    public void printKarte(Raum[][] raumArr, Raum aktuellerRaum){
+    public void printKarte(Raum[][] raumArr, Raum aktuellerRaum, boolean bereit){
         for (Raum[] raumUA : raumArr){
             boolean raeumeEx = false;
             for (Raum raum : raumUA) {
@@ -27,8 +27,11 @@ public class Karte {
                 } else if (raum == aktuellerRaum) {
                     System.out.print(" POS ");
                     raeumeEx = true;
-                } else {
+                } else if (!raum.isSecret()) {
                     System.out.print(" RAU ");
+                    raeumeEx = true;
+                } else if (raum.isSecret() && bereit) {
+                    System.out.print(" SEC ");
                     raeumeEx = true;
                 }
             }

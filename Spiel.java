@@ -84,7 +84,7 @@ class Spiel
      */
     private void raeumeAnlegen()
     {
-        Raum draussen, hoersaal, cafeteria, labor, buero, flur;
+        Raum draussen, hoersaal, cafeteria, labor, buero, flur, toilette, archiv, bibliothek;
         Hilfsmittel s1 = new Spickzettel("Spickzettel");
         Hilfsmittel s2 = new Spickzettel("Spickzettel");
         Hilfsmittel p1 = new Praktikumsloesung("Praktikumslösung");
@@ -101,8 +101,11 @@ class Spiel
         raumListe.add(buero);
         flur = new Raum("im Flur", p1);
         raumListe.add(flur);
+        toilette = new Raum("im Badezimmer");
+        raumListe.add(toilette);
+        toilette.setSecret(true);
 
-        raumArr[0] = new Raum[]{null, null, null, null, flur, null, null, null, null, null};
+        raumArr[0] = new Raum[]{null, null, null, null, flur, toilette, null, null, null, null};
         raumArr[1] = new Raum[]{null, null, null, cafeteria, draussen, hoersaal, null, null, null, null};
         raumArr[2] = new Raum[]{null, null, null, null, labor, buero, null, null, null, null};
 
@@ -116,6 +119,12 @@ class Spiel
                     if (raumArr[i][j + 1] != null) {
                         raumArr[i][j].setzeAusgang("east", raumArr[i][j + 1]);
                         raumArr[i][j + 1].setzeAusgang("west", raumArr[i][j]);
+                    }
+                    if (i == 1) {
+                        if (raumArr[i-1][j] != null && raumArr[i - 1][j + 1] != null) {
+                            raumArr[i-1][j].setzeAusgang("east", raumArr[i-1][j + 1]);
+                            raumArr[i-1][j + 1].setzeAusgang("west", raumArr[i-1][j]);
+                        }
                     }
                 }
             }
@@ -193,7 +202,7 @@ class Spiel
             nutzeHilfsmittel(befehl);
         }
         else if (befehlswort.equals("map")) {
-            karte.printKarte(raumArr, aktuellerRaum);
+            karte.printKarte(raumArr, aktuellerRaum, alleBesiegt);
         }
         else if (befehlswort.equals("quit")) {
             moechteBeenden = beenden(befehl);
@@ -248,7 +257,9 @@ class Spiel
 
         if (naechsterRaum == null)
             System.out.println("Dort ist keine T�r!");
-        else {
+        else if (alleBesiegt == false && naechsterRaum.isSecret()) {
+            System.out.println("Diesen Raum kannst du noch nicht betreten");
+        } else {
             aktuellerRaum = naechsterRaum;
             System.out.println(aktuellerRaum.gibLangeBeschreibung());
         }
@@ -368,6 +379,7 @@ class Spiel
             }
             if (alleBesiegt) {
                 System.out.println("Du hast alle Praktika bestanden und bist somit bereit für die Abschlussprüfung");
+                System.out.println("Vielleicht gibt es ja Änderungen auf der Map :)");
             }
         }
 

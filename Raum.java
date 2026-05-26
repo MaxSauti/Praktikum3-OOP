@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 class Raum 
 {
+    private boolean secret = false;
     private boolean besucht = false;
     private String beschreibung;
     private HashMap ausgaenge;        // die Ausg�nge dieses Raums
@@ -107,7 +108,7 @@ class Raum
      */
     private String gibAusgaengeAlsString()
     {
-        String ergebnis = "Ausg�nge:";
+        String ergebnis = "Ausgänge:";
         Set keys = ausgaenge.keySet();
         for(Iterator iter = keys.iterator(); iter.hasNext(); )
             ergebnis += " " + iter.next();
@@ -158,6 +159,14 @@ class Raum
 
     public HashMap getAusgaenge(){
         return ausgaenge;
+    }
+
+    public boolean isSecret() {
+        return secret;
+    }
+
+    public void setSecret(boolean secret) {
+        this.secret = secret;
     }
 }
 
