@@ -28,7 +28,13 @@ public class Karte {
                     System.out.print(" POS ");
                     raeumeEx = true;
                 } else if (!raum.isSecret()) {
-                    System.out.print(" RAU ");
+                    if (raum.getGegner() != null) {
+                        System.out.print("!RAU!");
+                    } else if (raum.getHilfsmittel() != null) {
+                        System.out.print("*RAU*");
+                    } else {
+                        System.out.print(" RAU ");
+                    }
                     raeumeEx = true;
                 } else if (raum.isSecret() && bereit) {
                     System.out.print(" SEC ");
