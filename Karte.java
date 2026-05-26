@@ -38,10 +38,16 @@ public class Karte {
                     System.out.print(" POS ");
                 } else if (!raum.isSecret()) {
                     if (raum.getGegner() != null) {
-                        System.out.print("!RAU!");
-                    } else if (raum.getHilfsmittel() != null) {
+                        if (raum.getGegner() instanceof Professor prof && raum.isBesiegt()) {
+                            System.out.print(" RAU ");
+                        } else if (raum.getGegner() instanceof Praktikum prak && prak.getAufgabe().isErfuellt()) {
+                            System.out.print(" RAU ");
+                        } else {
+                            System.out.print("!RAU!");
+                        }
+                    } /*else if (raum.getHilfsmittel() != null) {
                         System.out.print("*RAU*");
-                    } else {
+                    }*/ else {
                         System.out.print(" RAU ");
                     }
                 } else {

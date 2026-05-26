@@ -406,12 +406,12 @@ class Spiel
             if (antwort - 1 == richtigIDX) {
                 System.out.println("Richtige Antwort, der Gegner ist besiegt");
                 aktuellerRaum.setBesiegt(true);
-                System.out.println(aktuellerRaum.gibLangeBeschreibung());
                 if (hoffnung < 3 && prof.tryCount() == 0) {
                     System.out.println("Du hast beim ersten Mal richtig geantwortet und erhältst einen Hoffnungsboost.");
                     hoffnung++;
                     gibLebenAus();
                 }
+                System.out.println(aktuellerRaum.gibLangeBeschreibung());
             } else {
                 prof.setTryCount();
                 System.out.println("Das war die falsche Antwort, du verlierst Hoffnung");
