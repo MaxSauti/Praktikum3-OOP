@@ -1,23 +1,11 @@
 public class Karte {
-    public void erzeugeKarte(Raum raum) {
 
-    }
-
-    public void sucheRaueme(Raum raum) {
-        if (raum.isBesucht()) {
-            return;
-        }
-
-        System.out.println(raum.gibKurzbeschreibung());
-        raum.setBesucht(true);
-
-        for (Object ausgang : raum.getAusgaenge().values()){
-            if (ausgang != null) {
-                sucheRaueme((Raum) ausgang);
-            }
-        }
-    }
-
+    /**
+     * Wird benutzt um die Landkarte auszugeben
+     * @param raumArr           Raum Array aus dem die Karte erstellt wird
+     * @param aktuellerRaum     Aktuelle Position
+     * @param bereit            Ob alle Praktika bestanden sind
+     */
     public void printKarte(Raum[][] raumArr, Raum aktuellerRaum, boolean bereit){
         System.out.println();
         for (Raum[] raumUA : raumArr){

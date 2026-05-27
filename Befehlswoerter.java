@@ -23,7 +23,7 @@ class Befehlswoerter
     }
 
     /**
-     * Pr�fe, ob eine gegebene Zeichenkette ein g�ltiger
+     * Pr�fe, ob eine gegebene Zeichenkette ein gültiger
      * Befehl ist.
      * Liefere 'true', wenn das der Fall ist, 'false' sonst.
      */
@@ -34,12 +34,12 @@ class Befehlswoerter
                 return true;
         }
         // Wenn wir hierher gelangen, wurde die Eingabe nicht
-        // in den Befehlsw�rter gefunden.
+        // in den Befehlswörter gefunden.
         return false;
     }
 
-    /*
-     * Gib alle g�ltigen Befehlsw�rter auf die Konsole aus.
+    /**
+     * Gib alle gültigen Befehlswörter auf die Konsole aus.
      */
     public void alleAusgeben() 
     {

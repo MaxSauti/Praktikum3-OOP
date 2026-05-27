@@ -228,7 +228,7 @@ class Spiel
     }
 
     /**
-     * Die Hauptmethode zum Spielen. L�uft bis zum Ende des Spiels
+     * Die Hauptmethode zum Spielen. Läuft bis zum Ende des Spiels
      * in einer Schleife.
      */
     public void spielen() 
@@ -268,7 +268,7 @@ class Spiel
     }
     
     /**
-     * Einen Begr��ungstext f�r den Spieler ausgeben.
+     * Einen Begrüßungstext für den Spieler ausgeben.
      */
     private void willkommenstextAusgeben()
     {
@@ -285,8 +285,8 @@ class Spiel
     }
 
     /**
-     * Verarbeite einen gegebenen Befehl (f�hre ihn aus).
-     * Wenn der Befehl das Spiel beendet, wird 'true' zur�ckgeliefert,
+     * Verarbeite einen gegebenen Befehl (führe ihn aus).
+     * Wenn der Befehl das Spiel beendet, wird 'true' zurückgeliefert,
      * andernfalls 'false'.
      */
     private boolean verarbeiteBefehl(Befehl befehl) 
@@ -379,6 +379,10 @@ class Spiel
         }
     }
 
+    /**
+     * Verarbeitung des "answer" Befehls
+     * @param befehl
+     */
     private void beantworteFrage(Befehl befehl) {
         if (aktuellerRaum.getGegner() == null || (aktuellerRaum.getGegner() instanceof Praktikum prak)) {
             System.out.println("In diesem Raum gibt es keinen Gegner der dir eine Frage stellt");
@@ -436,7 +440,10 @@ class Spiel
         }
     }
 
-    public void sammleHilfsmittel(Befehl befehl){
+    /**
+     * Verarbeitung des "collect" Befehls, erwartet kein zweites Wort
+     */
+    private void sammleHilfsmittel(Befehl befehl){
         if(befehl.hatZweitesWort()) {
             System.out.println("Zum Einsammeln bitte nur \"collect\" eingeben");
             return;
@@ -452,6 +459,9 @@ class Spiel
         System.out.println(aktuellerRaum.gibLangeBeschreibung());
     }
 
+    /**
+     * Gebe Inventar aus
+     */
     public void zeigeInventar(){
         int i = 1;
         for (Hilfsmittel item : inventar) {
@@ -460,6 +470,11 @@ class Spiel
         }
     }
 
+    /**
+     * Verarbeitung des "use" Befehls
+     * Erwartet eine Zahl als zweites Wort und nutzt das Item an dieser Stelle des Inventars falls möglich
+     * @param befehl
+     */
     public void nutzeHilfsmittel(Befehl befehl){
         if (!befehl.hatZweitesWort()) {
             zeigeInventar();
@@ -529,12 +544,15 @@ class Spiel
 
     }
 
+    /**
+     * Gib Anzahl der verbleibenen Hoffnung aus
+     */
     public void gibLebenAus() {
         System.out.println("Du hast noch " + hoffnung + " Hoffnung");
     }
 
     /**
-     * "quit" wurde eingegeben. �berpr�fe den Rest des Befehls,
+     * "quit" wurde eingegeben. überprüfe den Rest des Befehls,
      * ob das Spiel wirklich beendet werden soll. Liefere 'true',
      * wenn der Befehl das Spiel beendet, 'false' sonst.
      */

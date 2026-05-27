@@ -28,6 +28,10 @@ class Parser
         befehle = new Befehlswoerter();
     }
 
+    /**
+     * Wird benutzt um Befehl von der Konsole auszulesen
+     * @return  Befehl der eingegeben wurde
+     */
     public Befehl liefereBefehl() 
     {
         String eingabezeile = "";   // f�r die gesamte Eingabezeile

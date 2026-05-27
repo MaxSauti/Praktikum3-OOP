@@ -36,6 +36,11 @@ class Raum
         ausgaenge = new HashMap();
     }
 
+    /**
+     * Konstruktor zum Erstellen eines Raumes mit Gegner
+     * @param beschreibung  Beschreibung des Raums
+     * @param gegner        Gegner in diesem Raum
+     */
     public Raum(String beschreibung, Gegner gegner){
         this(beschreibung);
         setGegner(gegner);
@@ -44,6 +49,11 @@ class Raum
         }
     }
 
+    /**
+     * Konstruktor zum Erstellen eines Raumes mit Hilfsmittel
+     * @param beschreibung  Beschreibung des Raumes
+     * @param hilfsmittel   Hilfsmittel in diesem Raum
+     */
     public Raum(String beschreibung, Hilfsmittel hilfsmittel) {
         this(beschreibung);
         this.hilfsmittel = hilfsmittel;
@@ -59,8 +69,16 @@ class Raum
         ausgaenge.put(richtung, nachbar);
     }
 
-    public void setGegner(Gegner gegner) {this.gegner = gegner;}
+    /**
+     * Definiere Gegner für diesen Raum
+     * @param gegner Gegner des Raumes
+     */
+    private void setGegner(Gegner gegner) {this.gegner = gegner;}
 
+    /**
+     *
+     * @return Gegner des Raumes
+     */
     public Gegner getGegner() {
         return gegner;
     }
@@ -77,7 +95,7 @@ class Raum
     /**
      * Liefere eine lange Beschreibung dieses Raums, in der Form:
      *     Sie sind in der K�che.
-     *     Ausg�nge: nord west
+     *     Ausgänge: nord west
      */
     public String gibLangeBeschreibung()
     {
@@ -129,14 +147,26 @@ class Raum
         return (Raum)ausgaenge.get(richtung);
     }
 
+    /**
+     *
+     * @param besiegt Ob der Raum besiegt wurde
+     */
     public void setBesiegt(boolean besiegt){
         this.besiegt = besiegt;
     }
 
+    /**
+     *
+     * @return Ob der Raum besiegt wurde
+     */
     public boolean isBesiegt() {
         return besiegt;
     }
 
+    /**
+     * Formatiert die Hilfsmittel als String
+     * @return  Hilfsmittel formatiert
+     */
     public String getHilfsmittelAlsString() {
         if (hilfsmittel == null){
             return "Hilfsmittel in diesem Raum: keine\n";
@@ -144,30 +174,41 @@ class Raum
         return "Hilfsmittel in diesem Raum: " + hilfsmittel.getBeschreibung() + "\n";
     }
 
+    /**
+     *
+     * @return Hilfsmittel des Raumes
+     */
     public Hilfsmittel getHilfsmittel() {
         return hilfsmittel;
     }
 
+    /**
+     * Entfernt das Hilfsmittel aus dem Raum
+     */
     public void sammleHilfsmittel() {
         hilfsmittel = null;
     }
 
-    public void setBesucht(boolean bes){
-        besucht = bes;
-    }
-
-    public boolean isBesucht() {
-        return besucht;
-    }
-
+    /**
+     *
+     * @return Ausgänge des Raumes
+     */
     public HashMap getAusgaenge(){
         return ausgaenge;
     }
 
+    /**
+     *
+     * @return  Ob der Raum geheim sein soll
+     */
     public boolean isSecret() {
         return secret;
     }
 
+    /**
+     * Kann einen Raum auf geheim setzen, sodass er vorerst nicht auf der Map angezeigt wird
+     * @param secret   Setzt einen Raum auf geheim wenn
+     */
     public void setSecret(boolean secret) {
         this.secret = secret;
     }
