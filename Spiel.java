@@ -181,7 +181,7 @@ class Spiel
         flur3 = new Raum("im Flur");
         flur4 = new Raum("im Flur");
         flur4.setSecret(true);
-        flur5 = new Raum("im Flur");
+        flur5 = new Raum("einen Raum vor der Abschlussprüfung, wenn du weiter gehst, gibt es kein Zurück mehr");
         flur5.setSecret(true);
 
         labor1 = new Raum("in einem Rechnerraum", gegnerListe.get(4));
