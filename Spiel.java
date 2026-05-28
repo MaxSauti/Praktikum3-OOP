@@ -188,7 +188,7 @@ class Spiel
         labor2 = new Raum("in einem Rechnerraum", gegnerListe.get(5));
 
         hoersaal1 = new Raum("in einem Vorlesungssaal", gegnerListe.get(0));
-        buero1 = new Raum("im Verwaltungsb�ro der Informatik", gegnerListe.get(1));
+        buero1 = new Raum("im Verwaltungsbüro der Informatik", gegnerListe.get(1));
         hoersaal2 = new Raum("in einem Hörsaal der BWL", gegnerListe.get(2));
         buero2 = new Raum("in einem Büro eines Betriebssystemspezialisten", gegnerListe.get(3));
 
